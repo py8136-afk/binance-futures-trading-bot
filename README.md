@@ -168,3 +168,19 @@ All anticipated failures raise a typed exception (`ConfigError`,
 `ValidationError`, `BinanceAPIError`, `NetworkError`) that the CLI catches and
 renders as a single clean failure panel, while the full detail (including the
 exchange's own error code and message) is written to the log file.
+
+cat >> README.md << 'EOF'
+
+## Known limitation: conditional orders on the demo environment
+
+The bot implements a third order type, `STOP_MARKET`, and constructs a fully
+valid signed request for it (verifiable via `--dry-run`). However, the current
+Binance demo environment (`demo-fapi.binance.com`) rejects all conditional
+order types (`STOP`, `STOP_MARKET`) on `POST /fapi/v1/order` with error
+`-4120: Order type not supported for this endpoint. Please use the Algo Order
+API endpoints instead.` — conditional orders have been migrated to a separate
+Algo Order API on this environment. Market and Limit orders are unaffected and
+are demonstrated live in `logs/bot.log`. The bot maps this exchange error to a
+clean failure message, which is itself a demonstration of the error-handling
+layer.
+EOF
