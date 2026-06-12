@@ -132,7 +132,10 @@ class BinanceFuturesClient:
         except ValueError:
             body = {"raw": resp.text}
 
-        self.log.debug("RESPONSE %s %s -> %s | %s", method, path, resp.status_code, body)
+        body_str = str(body)
+        if len(body_str) > 2000:
+            body_str = body_str[:2000] + f" ...<truncated, {len(body_str)} chars total>"
+        self.log.debug("RESPONSE %s %s -> %s | %s", method, path, resp.status_code, body_str)
 
         if resp.status_code == 200:
             return body
