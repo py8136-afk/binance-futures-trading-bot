@@ -20,7 +20,7 @@ from decimal import ROUND_DOWN, Decimal, InvalidOperation
 from .exceptions import ValidationError
 
 VALID_SIDES = {"BUY", "SELL"}
-VALID_ORDER_TYPES = {"MARKET", "LIMIT", "STOP"}  # STOP = stop-limit on futures
+VALID_ORDER_TYPES = {"MARKET", "LIMIT", "STOP_MARKET"}
 
 
 # ----- structural input checks --------------------------------------------

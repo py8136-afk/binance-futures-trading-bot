@@ -54,13 +54,13 @@ def _fail(message: str) -> None:
 def order(
     symbol: str = typer.Argument(..., help="e.g. BTCUSDT"),
     side: str = typer.Argument(..., help="BUY or SELL"),
-    order_type: str = typer.Argument(..., metavar="TYPE", help="MARKET, LIMIT or STOP"),
+    order_type: str = typer.Argument(..., metavar="TYPE", help="MARKET, LIMIT or STOP_MARKET"),
     qty: float = typer.Option(..., "--qty", "-q", help="Order quantity"),
     price: Optional[float] = typer.Option(None, "--price", "-p", help="Required for LIMIT/STOP"),
     stop_price: Optional[float] = typer.Option(None, "--stop-price", "-s", help="Required for STOP"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Build + sign but do NOT send"),
 ):
-    """Place a MARKET, LIMIT or STOP (stop-limit) order."""
+    """Place a MARKET, LIMIT or STOP_MARKET (stop-limit) order."""
     ot = order_type.upper()
 
     # Request summary up front, before we touch the network.
@@ -97,10 +97,10 @@ def order(
             result = svc.place_market(symbol, side, qty)
         elif ot == "LIMIT":
             result = svc.place_limit(symbol, side, qty, price)
-        elif ot == "STOP":
-            result = svc.place_stop_limit(symbol, side, qty, price, stop_price)
+        elif ot == "STOP_MARKET":
+            result = svc.place_stop_market(symbol, side, qty, stop_price)
         else:
-            _fail(f"Unknown order type '{order_type}'. Use MARKET, LIMIT or STOP.")
+            _fail(f"Unknown order type '{order_type}'. Use MARKET, LIMIT or STOP_MARKET.")
             return
     except BotError as exc:
         _fail(str(exc))

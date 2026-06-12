@@ -83,27 +83,22 @@ class OrderService:
         }
         return self._submit(params)
 
-    def place_stop_limit(self, symbol: str, side: str, quantity, price, stop_price) -> dict:
+    def place_stop_market(self, symbol: str, side: str, quantity, stop_price) -> dict:
         """Bonus order type. Binance 'STOP' = stop-limit: needs price + stopPrice."""
         symbol = v.validate_symbol(symbol)
         side = v.validate_side(side)
         qty = v.validate_quantity(quantity)
-        px = v.validate_price(price, required=True)
         stop = v.validate_price(stop_price, required=True)
 
         filters = self._filters_for(symbol)
         qty = v.normalize_quantity(qty, filters)
-        px = v.normalize_price(px, filters)
         stop = v.normalize_price(stop, filters)
-        v.check_min_notional(qty, px, filters)
 
         params = {
             "symbol": symbol,
             "side": side,
-            "type": "STOP",
-            "timeInForce": "GTC",
+            "type": "STOP_MARKET",
             "quantity": _fmt(qty),
-            "price": _fmt(px),
             "stopPrice": _fmt(stop),
             "newClientOrderId": self._client_order_id(),
         }
@@ -160,7 +155,7 @@ class OrderService:
         px = v.validate_price(price, required=True)
         stop = v.validate_price(stop_price, required=True)
         return {
-            "symbol": symbol, "side": side, "type": "STOP", "timeInForce": "GTC",
+            "symbol": symbol, "side": side, "type": "STOP_MARKET", "timeInForce": "GTC",
             "quantity": str(qty), "price": str(px), "stopPrice": str(stop),
             "newClientOrderId": self._client_order_id(),
         }
