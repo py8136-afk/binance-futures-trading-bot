@@ -154,8 +154,8 @@ class OrderService:
         qty = v.validate_quantity(quantity)
         stop = v.validate_price(stop_price, required=True)
         return {
-            "symbol": symbol, "side": side, "type": "STOP_MARKET", "timeInForce": "GTC",
-            "quantity": str(qty), "price": str(px), "stopPrice": str(stop),
+            "symbol": symbol, "side": side, "type": "STOP_MARKET",
+            "quantity": str(qty), "stopPrice": str(stop),
             "newClientOrderId": self._client_order_id(),
         }
 
