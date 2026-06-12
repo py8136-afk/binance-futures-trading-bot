@@ -152,7 +152,6 @@ class OrderService:
         symbol = v.validate_symbol(symbol)
         side = v.validate_side(side)
         qty = v.validate_quantity(quantity)
-        px = v.validate_price(price, required=True)
         stop = v.validate_price(stop_price, required=True)
         return {
             "symbol": symbol, "side": side, "type": "STOP_MARKET", "timeInForce": "GTC",
